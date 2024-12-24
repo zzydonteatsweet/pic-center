@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/deactive")
-    public BaseResponse<Integer> deactiveUser(String userAccount, HttpServletRequest request) {
-        return ResultUtils.success(userService.deactiveUser(userAccount, request));
+    public BaseResponse<Integer> deactiveUser(HttpServletRequest request) {
+        return ResultUtils.success(userService.deactiveUser(request));
     }
 }

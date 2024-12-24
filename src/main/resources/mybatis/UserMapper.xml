@@ -222,7 +222,7 @@
     invite_user,
     is_delete
     FROM
-    user_table
+    user
     <where>
       <if test="id != null">
         AND id = #{id}

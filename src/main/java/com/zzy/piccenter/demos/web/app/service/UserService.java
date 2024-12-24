@@ -50,11 +50,11 @@ public class UserService {
     public UserInfoDTO userLogin(UserLoginDTO userLoginDTO, HttpServletRequest request) {
         User user = UserAssembler.INSTANCE.toUser(userLoginDTO);
         User existUser = userRepository.queryUserByUserAccount(user.getUserAccount());
-        if (checkAccountPasswordRight(user, existUser)) {
+        if (!checkAccountPasswordRight(user, existUser)) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
         }
-        request.getSession().setAttribute(UserStateEnum.USER_LOGIN_STATE.getState(), user);
-        return UserAssembler.INSTANCE.toUserInfoDTO(user);
+        request.getSession().setAttribute(UserStateEnum.USER_LOGIN_STATE.getState(), existUser);
+        return UserAssembler.INSTANCE.toUserInfoDTO(existUser);
     }
 
     private boolean checkAccountPasswordRight(User loginUser, User existUser) {
@@ -69,7 +69,7 @@ public class UserService {
     public User getCurrentUser(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
         User currentUser = (User) userObj;
-        if (currentUser == null || currentUser.getId() == null) {
+        if (currentUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         return currentUser;
@@ -80,8 +80,7 @@ public class UserService {
         return UserAssembler.INSTANCE.toUserInfoDTO(currentUser);
     }
 
-    public Integer deactiveUser(String userAccount, HttpServletRequest request) {
-        User currentUser = getCurrentUser(request);
+    public Integer deactiveUser(HttpServletRequest request) {
         removeSessionUserState(request);
         return 1;
     }
