@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzy.piccenter.demos.web.infrastructure.mapper.PictureMapper" >
+  <resultMap id="BaseResultMap" type="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="pic_size" property="picSize" jdbcType="BIGINT" />
+    <result column="pic_width" property="picWidth" jdbcType="INTEGER" />
+    <result column="pic_height" property="picHeight" jdbcType="INTEGER" />
+    <result column="pic_scale" property="picScale" jdbcType="DOUBLE" />
+    <result column="pic_format" property="picFormat" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, url, name, introduction, category, tags, pic_size, pic_width, pic_height, pic_scale, 
+    pic_format, user_id, create_time, edit_time, update_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from picture
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" useGeneratedKeys="true" >
+    insert into picture (id, url, name, 
+      introduction, category, tags, 
+      pic_size, pic_width, pic_height, 
+      pic_scale, pic_format, user_id, 
+      create_time, edit_time, update_time, 
+      is_delete)
+    values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{introduction,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
+      #{picSize,jdbcType=BIGINT}, #{picWidth,jdbcType=INTEGER}, #{picHeight,jdbcType=INTEGER}, 
+      #{picScale,jdbcType=DOUBLE}, #{picFormat,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{editTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" >
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="tags != null" >
+        tags,
+      </if>
+      <if test="picSize != null" >
+        pic_size,
+      </if>
+      <if test="picWidth != null" >
+        pic_width,
+      </if>
+      <if test="picHeight != null" >
+        pic_height,
+      </if>
+      <if test="picScale != null" >
+        pic_scale,
+      </if>
+      <if test="picFormat != null" >
+        pic_format,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="editTime != null" >
+        edit_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="picSize != null" >
+        #{picSize,jdbcType=BIGINT},
+      </if>
+      <if test="picWidth != null" >
+        #{picWidth,jdbcType=INTEGER},
+      </if>
+      <if test="picHeight != null" >
+        #{picHeight,jdbcType=INTEGER},
+      </if>
+      <if test="picScale != null" >
+        #{picScale,jdbcType=DOUBLE},
+      </if>
+      <if test="picFormat != null" >
+        #{picFormat,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null" >
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" useGeneratedKeys="true" >
+    update picture
+    <set >
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="picSize != null" >
+        pic_size = #{picSize,jdbcType=BIGINT},
+      </if>
+      <if test="picWidth != null" >
+        pic_width = #{picWidth,jdbcType=INTEGER},
+      </if>
+      <if test="picHeight != null" >
+        pic_height = #{picHeight,jdbcType=INTEGER},
+      </if>
+      <if test="picScale != null" >
+        pic_scale = #{picScale,jdbcType=DOUBLE},
+      </if>
+      <if test="picFormat != null" >
+        pic_format = #{picFormat,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null" >
+        edit_time = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" >
+    update picture
+    set url = #{url,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
+      category = #{category,jdbcType=VARCHAR},
+      tags = #{tags,jdbcType=VARCHAR},
+      pic_size = #{picSize,jdbcType=BIGINT},
+      pic_width = #{picWidth,jdbcType=INTEGER},
+      pic_height = #{picHeight,jdbcType=INTEGER},
+      pic_scale = #{picScale,jdbcType=DOUBLE},
+      pic_format = #{picFormat,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

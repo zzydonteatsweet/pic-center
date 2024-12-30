@@ -1,4 +1,4 @@
-package com.zzy.piccenter.demos.web.app.handler;
+package com.zzy.piccenter.demos.web.infrastructure.handler;
 
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;

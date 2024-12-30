@@ -7,6 +7,7 @@ import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -14,7 +15,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -30,6 +30,7 @@ public class AuthInterceptor {
     @Resource
     private UserService userService;
 
+    @Around(value = "@annotation(authCheck)", argNames = "joinPoint,authCheck")
     public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthCheck authCheck) throws Throwable {
         String mustRole = authCheck.requiredRole();
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();

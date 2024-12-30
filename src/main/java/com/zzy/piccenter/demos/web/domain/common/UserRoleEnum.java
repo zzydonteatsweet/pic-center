@@ -33,10 +33,11 @@ public enum UserRoleEnum {
             return null;
         }
         for (UserRoleEnum anEnum : UserRoleEnum.values()) {
-            if (anEnum.value.equals(value)) {
+            if (anEnum.getValue().equals(value)) {
                 return anEnum;
             }
         }
         return null;
     }
+
 }

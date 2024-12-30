@@ -1,13 +1,10 @@
 package com.zzy.piccenter.demos.web.infrastructure.mapper;
 
-
 import com.zzy.piccenter.demos.web.infrastructure.po.UserPO;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author T041018
  */
-@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -15,11 +12,11 @@ public interface UserMapper {
 
     int insertSelective(UserPO record);
 
+    UserPO selectSelective(UserPO userPO);
+
     UserPO selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(UserPO record);
 
     int updateByPrimaryKey(UserPO record);
-
-    UserPO selectSelective(UserPO userPO);
 }

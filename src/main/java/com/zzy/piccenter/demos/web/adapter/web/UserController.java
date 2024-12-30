@@ -1,13 +1,12 @@
 package com.zzy.piccenter.demos.web.adapter.web;
 
-import cn.hutool.system.UserInfo;
 import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.request.UserLoginDTO;
 import com.zzy.piccenter.demos.web.app.request.UserRegisterDTO;
 import com.zzy.piccenter.demos.web.app.response.BaseResponse;
 import com.zzy.piccenter.demos.web.app.service.UserService;
+import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
 import com.zzy.piccenter.demos.web.infrastructure.common.utils.ResultUtils;
-import lombok.Getter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,4 +45,11 @@ public class UserController {
     public BaseResponse<Integer> deactiveUser(HttpServletRequest request) {
         return ResultUtils.success(userService.deactiveUser(request));
     }
+
+    @AuthCheck(requiredRole = "admin")
+    @GetMapping("/test-admin")
+    public BaseResponse<String> testAdmin() {
+        return ResultUtils.success("You are admin");
+    }
+
 }

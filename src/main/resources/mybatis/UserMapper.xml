@@ -275,7 +275,7 @@
     </where>
   </select>
 
-  <update id="updateByPrimaryKey" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.UserPO">
+    <update id="updateByPrimaryKey" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.UserPO">
     update user
     set user_account = #{userAccount,jdbcType=VARCHAR},
       user_password = #{userPassword,jdbcType=VARCHAR},
