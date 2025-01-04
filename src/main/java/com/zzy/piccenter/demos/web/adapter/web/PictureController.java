@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
@@ -49,7 +50,7 @@ public class PictureController {
     }
 
     @GetMapping("/download")
-    public void downloadFile(Long pictureId, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadFile(@NotNull @RequestParam Long pictureId, HttpServletRequest request, HttpServletResponse response) {
         UserInfoDTO user = userService.getLoingUser(request);
         pictureService.downloadFile(pictureId, user, response);
     }

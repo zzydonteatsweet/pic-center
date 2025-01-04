@@ -1,7 +1,10 @@
 package com.zzy.piccenter.demos.web.infrastructure.po;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class PicturePO {
     private Long id;
 
@@ -25,7 +28,7 @@ public class PicturePO {
 
     private String picFormat;
 
-    private Long userId;
+    private String userAccount;
 
     private Date createTime;
 
@@ -123,13 +126,6 @@ public class PicturePO {
         this.picFormat = picFormat == null ? null : picFormat.trim();
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -161,5 +157,13 @@ public class PicturePO {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 }

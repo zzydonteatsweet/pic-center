@@ -41,7 +41,7 @@ public class Picture {
 
     private String picFormat;
 
-    private Long userId;
+    private String userAccount;
 
     private Date createTime;
 

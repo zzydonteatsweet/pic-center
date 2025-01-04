@@ -4,6 +4,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson2.JSON;
 import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
 import com.qcloud.cos.model.ciModel.persistence.OriginalInfo;
+import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -12,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 public interface PictureAssembler {
     PictureAssembler INSTANCE = Mappers.getMapper(PictureAssembler.class);
 
-    default Picture toPicture(OriginalInfo originalInfo, String url, long size) {
+    default Picture toPicture(OriginalInfo originalInfo, String url, long size, UserInfoDTO user) {
         ImageInfo imageInfo = originalInfo.getImageInfo();
         int picWidth = imageInfo.getWidth();
         int picHeight = imageInfo.getHeight();
@@ -26,6 +27,7 @@ public interface PictureAssembler {
                 .picHeight(imageInfo.getHeight())
                 .picWidth(imageInfo.getWidth())
                 .picScale(scale)
+                .userAccount(user.getUserAccount())
                 .build();
     };
 }

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -88,25 +89,29 @@ public class PictureServiceImpl implements PictureService {
     }
 
 
-    private String getFileName(String userAccount, String originalFileName) {
-        String filePath = String.format("/public/%s", userAccount);
+    private String getFileName(String originalFileName) {
         String uuid = RandomUtil.randomString(16);
-        return String.format("%s_%s_%s", DateUtil.formatDate(new Date()), uuid, originalFileName);
+        return String.format("%s_%s", uuid, originalFileName);
+    }
+
+    private String getFilePath(String fileName, String userAccount) {
+        return String.format("/public/%s/%s",userAccount, fileName);
     }
 
     @Override
     public PictureInfoDTO uploadFile(MultipartFile multipartFile, UserInfoDTO user, PictureCmd pictureCmd) {
         throwIfFileNotValid(multipartFile);
         throwIfPicIdNotValid(pictureCmd.getId());
-        String fileName = getFileName(user.getUserAccount(), multipartFile.getOriginalFilename());
+        String fileName = getFileName(multipartFile.getOriginalFilename());
+        String filePath = getFilePath(fileName, user.getUserAccount());
         File file = null;
         PutObjectResult result = null;
         try {
             file = File.createTempFile(fileName, null);
             multipartFile.transferTo(file);
-            result = cosManager.putObjectResult(fileName, file);
-            String url = String.format("%s/%s", cosManager.getHost(), fileName);
-            Picture picture = PictureAssembler.INSTANCE.toPicture(result.getCiUploadResult().getOriginalInfo(), url, FileUtil.size(file));
+            result = cosManager.putObjectResult(filePath, file);
+            String url = String.format("%s/%s", cosManager.getHost(), filePath);
+            Picture picture = PictureAssembler.INSTANCE.toPicture(result.getCiUploadResult().getOriginalInfo(), url, FileUtil.size(file), user);
             if (!Objects.isNull(pictureCmd.getId())) {
                 picture.populateId(pictureCmd.getId());
             }
@@ -121,17 +126,18 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public void downloadFile(Long pictureId, UserInfoDTO user, HttpServletResponse response) {
+    public void downloadFile(@NotNull Long pictureId, UserInfoDTO user, HttpServletResponse response) {
         throwIfPicIdNotValid(pictureId);
         Picture picture = pictureRepository.queryPictureById(pictureId);
-        String fileName = getFileName(user.getUserAccount(), picture.getName());
+        String fileName = picture.getName();
         cosManager.downloadFile(fileName, response);
     }
 
 
     private void throwIfPicIdNotValid(Long picId) {
-        ThrowUtils.throwIf(Objects.isNull(picId), new BusinessException(ErrorCode.OPERATION_ERROR, "没有提供id"));
-        ThrowUtils.throwIf(Objects.isNull(pictureRepository.queryPictureById(picId)), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("没有id为%lld的图片", picId)));
+        if (!Objects.isNull(picId)) {
+            ThrowUtils.throwIf(Objects.isNull(pictureRepository.queryPictureById(picId)), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("没有id为%d的图片", picId)));
+        }
     }
 
     private void throwIfFileNotValid(MultipartFile multipartFile) {
