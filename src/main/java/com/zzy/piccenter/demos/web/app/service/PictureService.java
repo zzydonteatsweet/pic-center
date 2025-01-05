@@ -1,8 +1,11 @@
 package com.zzy.piccenter.demos.web.app.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zzy.piccenter.demos.web.app.dto.PictureInfoDTO;
 import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
+import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
+import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,4 +26,6 @@ public interface PictureService {
     PictureInfoDTO uploadFile(MultipartFile multipartFile, UserInfoDTO user, PictureCmd cmd);
 
     void downloadFile(Long pictureId, UserInfoDTO user, HttpServletResponse response);
+
+    PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserInfoDTO user);
 }

@@ -45,7 +45,7 @@ public class Picture {
 
     private Date createTime;
 
-    private Date editeTime;
+    private Date editTime;
 
     public void populateId(Long id) {
         this.id = id;

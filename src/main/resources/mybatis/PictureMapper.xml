@@ -146,6 +146,101 @@
             </if>
         </trim>
     </insert>
+    <select id="selectSelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM picture
+        WHERE 1 = 1
+        <if test="id != null">
+            AND id = #{id,jdbcType=BIGINT}
+        </if>
+        <if test="url != null">
+            AND url = #{url,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="introduction != null">
+            AND introduction = #{introduction,jdbcType=VARCHAR}
+        </if>
+        <if test="category != null">
+            AND category = #{category,jdbcType=VARCHAR}
+        </if>
+        <if test="tags != null">
+            AND JSON_CONTAINS(tags, #{tags,jdbcType=VARCHAR})
+        </if>
+        <if test="picSize != null">
+            AND pic_size = #{picSize,jdbcType=BIGINT}
+        </if>
+        <if test="picWidth != null">
+            AND pic_width = #{picWidth,jdbcType=INTEGER}
+        </if>
+        <if test="picHeight != null">
+            AND pic_height = #{picHeight,jdbcType=INTEGER}
+        </if>
+        <if test="picScale != null">
+            AND pic_scale = #{picScale,jdbcType=DOUBLE}
+        </if>
+        <if test="picFormat != null">
+            AND pic_format = #{picFormat,jdbcType=VARCHAR}
+        </if>
+        <if test="userAccount != null">
+            AND user_account = #{userAccount,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+            AND create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="editTime != null">
+            AND edit_time = #{editTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null">
+            AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="isDelete != null">
+            AND is_delete = #{isDelete,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="selectSelectiveFuzzily" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO" resultMap="BaseResultMap">
+        SELECT
+        id, url, name, introduction, category, tags,
+        pic_size, pic_width, pic_height, pic_scale,
+        pic_format, user_account, create_time, edit_time, update_time, is_delete
+        FROM
+        picture
+        WHERE
+        is_delete = 0
+        <if test="url != null and url != ''">
+            AND url LIKE CONCAT('%', #{url}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="introduction != null and introduction != ''">
+            AND introduction LIKE CONCAT('%', #{introduction}, '%')
+        </if>
+        <if test="category != null and category != ''">
+            AND category LIKE CONCAT('%', #{category}, '%')
+        </if>
+        <if test="tags != null and tags != ''">
+            AND JSON_CONTAINS(tags, #{tags,jdbcType=VARCHAR})
+        </if>
+        <if test="userAccount != null and userAccount != ''">
+            AND user_account LIKE CONCAT('%', #{userAccount}, '%')
+        </if>
+        <if test="createTime != null">
+            AND create_time = #{createTime}
+        </if>
+        <if test="editTime != null">
+            AND edit_time = #{editTime}
+        </if>
+        <if test="updateTime != null">
+            AND update_time = #{updateTime}
+        </if>
+    </select>
+
+
     <update id="updateByPrimaryKeySelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.PicturePO"
             useGeneratedKeys="true">
         update picture

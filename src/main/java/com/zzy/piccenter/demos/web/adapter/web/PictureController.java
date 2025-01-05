@@ -1,9 +1,13 @@
 package com.zzy.piccenter.demos.web.adapter.web;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.zzy.piccenter.demos.web.app.dto.PictureInfoDTO;
 import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
+import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.app.response.BaseResponse;
+import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
@@ -33,11 +37,13 @@ public class PictureController {
     @Resource
     private UserService userService;
 
+    @AuthCheck(requiredRole = "admin")
     @PostMapping("/test/upload")
     public BaseResponse<String> testUploadFile(@RequestPart("file") MultipartFile multipartFile) {
         return ResultUtils.success(pictureService.testUploadFile(multipartFile));
     }
 
+    @AuthCheck(requiredRole = "admin")
     @GetMapping("/test/download")
     public void testDonwloadFile(String filePath, HttpServletResponse response) throws IOException {
         pictureService.testDownloadFile(filePath, response);
@@ -55,5 +61,9 @@ public class PictureController {
         pictureService.downloadFile(pictureId, user, response);
     }
 
-
+    @PostMapping("/query")
+    public BaseResponse<PageInfo<PictureBriefDTO>> queryPictureInfo(HttpServletRequest request, @RequestBody(required = false) PictureBriefQuery query) {
+        UserInfoDTO user = userService.getLoingUser(request);
+        return ResultUtils.success(pictureService.queryPicture(query, user));
+    }
 }

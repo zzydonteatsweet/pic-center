@@ -1,9 +1,11 @@
 package com.zzy.piccenter.demos.web.infrastructure.service;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qcloud.cos.model.COSObject;
 import com.qcloud.cos.model.COSObjectInputStream;
 import com.qcloud.cos.model.PutObjectResult;
@@ -13,12 +15,15 @@ import com.zzy.piccenter.demos.web.app.dto.PictureInfoDTO;
 import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.repository.PictureRepository;
 import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
+import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
+import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
 import com.zzy.piccenter.demos.web.infrastructure.common.utils.ThrowUtils;
 import com.zzy.piccenter.demos.web.infrastructure.manager.CosManager;
+import com.zzy.piccenter.demos.web.infrastructure.utils.PageBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -131,6 +136,15 @@ public class PictureServiceImpl implements PictureService {
         Picture picture = pictureRepository.queryPictureById(pictureId);
         String fileName = picture.getName();
         cosManager.downloadFile(fileName, response);
+    }
+
+    @Override
+    public PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserInfoDTO user) {
+        PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        List<Picture> pictures = pictureRepository.queryPictureFuzzily(query);
+        PageInfo<Picture> picturePageInfo = new PageInfo<>(pictures);
+        List<PictureBriefDTO> briefPictures = PictureAssembler.INSTANCE.toPictureBriefDTO(pictures);
+        return PageBeanUtils.rebuildPage(briefPictures, picturePageInfo);
     }
 
 

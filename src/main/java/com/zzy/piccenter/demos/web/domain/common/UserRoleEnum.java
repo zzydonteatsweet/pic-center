@@ -7,7 +7,6 @@ import lombok.Getter;
  *
  * @author T041018
  */
-@Getter
 public enum UserRoleEnum {
 
     USER("用户", "user"),
@@ -16,6 +15,7 @@ public enum UserRoleEnum {
     private final String text;
 
     private final String value;
+
 
     UserRoleEnum(String text, String value) {
         this.text = text;
@@ -40,4 +40,11 @@ public enum UserRoleEnum {
         return null;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

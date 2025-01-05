@@ -5,9 +5,12 @@ import com.alibaba.fastjson2.JSON;
 import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
 import com.qcloud.cos.model.ciModel.persistence.OriginalInfo;
 import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
+import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper
 public interface PictureAssembler {
@@ -30,4 +33,8 @@ public interface PictureAssembler {
                 .userAccount(user.getUserAccount())
                 .build();
     };
+
+    PictureBriefDTO toPictureBriefDTO(Picture picture);
+
+    List<PictureBriefDTO> toPictureBriefDTO(List<Picture> pictures);
 }

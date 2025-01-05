@@ -2,6 +2,7 @@ package com.zzy.piccenter.demos.web.infrastructure.interceptor;
 
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
+import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
@@ -36,7 +37,13 @@ public class AuthInterceptor {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
-        User loginUser = userService.getCurrentUser(request);
+
+        Object userObj = request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
+        User loginUser = (User) userObj;
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
         UserRoleEnum mustRoleEnum = UserRoleEnum.getEnumByValue(mustRole);
 
         if (mustRole == null) {
