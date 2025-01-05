@@ -3,7 +3,6 @@ package com.zzy.piccenter.demos.web.infrastructure.service;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qcloud.cos.model.COSObject;
@@ -18,6 +17,7 @@ import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
+import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
@@ -100,13 +100,13 @@ public class PictureServiceImpl implements PictureService {
     }
 
     private String getFilePath(String fileName, String userAccount) {
-        return String.format("/public/%s/%s",userAccount, fileName);
+        return String.format("/public/%s/%s", userAccount, fileName);
     }
 
     @Override
     public PictureInfoDTO uploadFile(MultipartFile multipartFile, UserInfoDTO user, PictureCmd pictureCmd) {
         throwIfFileNotValid(multipartFile);
-        throwIfPicIdNotValid(pictureCmd.getId());
+        throwIfPicIdNotValid(pictureCmd.getId(), user);
         String fileName = getFileName(multipartFile.getOriginalFilename());
         String filePath = getFilePath(fileName, user.getUserAccount());
         File file = null;
@@ -132,7 +132,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public void downloadFile(@NotNull Long pictureId, UserInfoDTO user, HttpServletResponse response) {
-        throwIfPicIdNotValid(pictureId);
+        throwIfPicIdNotValid(pictureId, user);
         Picture picture = pictureRepository.queryPictureById(pictureId);
         String fileName = picture.getName();
         cosManager.downloadFile(fileName, response);
@@ -148,9 +148,11 @@ public class PictureServiceImpl implements PictureService {
     }
 
 
-    private void throwIfPicIdNotValid(Long picId) {
+    private void throwIfPicIdNotValid(Long picId, UserInfoDTO user) {
         if (!Objects.isNull(picId)) {
-            ThrowUtils.throwIf(Objects.isNull(pictureRepository.queryPictureById(picId)), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("没有id为%d的图片", picId)));
+            Picture picture = pictureRepository.queryPictureById(picId);
+            ThrowUtils.throwIf(Objects.isNull(picture), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("没有id为%d的图片", picId)));
+            ThrowUtils.throwIf(picture.getUserAccount().equals(user.getUserAccount()) && !user.getUserRole().equals(UserRoleEnum.ADMIN.getValue()), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("用户%s对图片%d无权限", user.getUserAccount(), picId)));
         }
     }
 
