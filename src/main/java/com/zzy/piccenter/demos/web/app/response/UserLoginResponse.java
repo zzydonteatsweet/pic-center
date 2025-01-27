@@ -1,15 +1,21 @@
-package com.zzy.piccenter.demos.web.app.dto;
+package com.zzy.piccenter.demos.web.app.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <h3>pic-center</h3>
  *
  * @author : olmomsimith
- * @date : 2024-12-22 20:39
+ * @date : 2025-01-18 12:49
  **/
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
-public class UserInfoDTO {
+public class UserLoginResponse {
     private String userAccount;
 
     private String userName;
@@ -22,4 +28,5 @@ public class UserInfoDTO {
 
     private String userRole;
 
+    private String token;
 }

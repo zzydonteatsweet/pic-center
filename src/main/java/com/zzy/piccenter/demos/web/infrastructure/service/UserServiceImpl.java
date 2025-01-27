@@ -1,19 +1,22 @@
 package com.zzy.piccenter.demos.web.infrastructure.service;
 
 import com.zzy.piccenter.demos.web.app.assembler.UserAssembler;
-import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.repository.UserRepository;
 import com.zzy.piccenter.demos.web.app.request.UserLoginDTO;
 import com.zzy.piccenter.demos.web.app.request.UserRegisterDTO;
+import com.zzy.piccenter.demos.web.app.response.UserLoginResponse;
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <h3>pic-center</h3>
@@ -25,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 1. 检查用户账号是否已经在数据库中存在
@@ -50,15 +56,27 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    private String getRedisKey(String key) {
+        return UUID.randomUUID().toString() + "_" + key;
+    }
+
+    private static long REDIS_TTL = 3600;
+
     @Override
-    public UserInfoDTO userLogin(UserLoginDTO userLoginDTO, HttpServletRequest request) {
-        User user = UserAssembler.INSTANCE.toUser(userLoginDTO);
-        User existUser = userRepository.queryUserByUserAccount(user.getUserAccount());
-        if (!checkAccountPasswordRight(user, existUser)) {
+    public UserLoginResponse userLogin(UserLoginDTO userLoginDTO, HttpServletRequest request) {
+        User submitUser = UserAssembler.INSTANCE.toUser(userLoginDTO);
+        User existUser = userRepository.queryUserByUserAccount(submitUser.getUserAccount());
+        if (!checkAccountPasswordRight(submitUser, existUser)) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
         }
+        String userAccount = submitUser.getUserAccount();
+
+        String redisKey = getRedisKey(userAccount);
+        stringRedisTemplate.opsForValue().set(redisKey, existUser.toString());
+        stringRedisTemplate.expire(redisKey, REDIS_TTL, TimeUnit.SECONDS);
         request.getSession().setAttribute(UserStateEnum.USER_LOGIN_STATE.getState(), existUser);
-        return UserAssembler.INSTANCE.toUserInfoDTO(existUser);
+        request.getSession().setAttribute("token", redisKey);
+        return UserAssembler.INSTANCE.toUserLoginResponse(existUser, redisKey);
     }
 
     @Override
@@ -82,7 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getLoingUser(HttpServletRequest request) {
+    public UserLoginResponse getLoingUser(HttpServletRequest request) {
         User currentUser = getCurrentUser(request);
         return UserAssembler.INSTANCE.toUserInfoDTO(currentUser);
     }

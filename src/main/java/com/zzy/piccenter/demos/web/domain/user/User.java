@@ -1,7 +1,10 @@
 package com.zzy.piccenter.demos.web.domain.user;
 
+import com.alibaba.fastjson2.JSON;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -12,6 +15,7 @@ import java.util.Date;
  * @date : 2024-12-19 00:10
  **/
 @Data
+@Builder
 public class User {
     private Long id;
 
@@ -42,4 +46,9 @@ public class User {
     private String shareCode;
 
     private Long inviteUser;
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

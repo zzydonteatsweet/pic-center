@@ -1,9 +1,9 @@
 package com.zzy.piccenter.demos.web.adapter.web;
 
-import com.zzy.piccenter.demos.web.app.dto.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.request.UserLoginDTO;
 import com.zzy.piccenter.demos.web.app.request.UserRegisterDTO;
 import com.zzy.piccenter.demos.web.app.response.BaseResponse;
+import com.zzy.piccenter.demos.web.app.response.UserLoginResponse;
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
 import com.zzy.piccenter.demos.web.infrastructure.common.utils.ResultUtils;
@@ -31,13 +31,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<UserInfoDTO> userLogin(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
-        UserInfoDTO userInfoDTO = userService.userLogin(userLoginDTO, request);
+    public BaseResponse<UserLoginResponse> userLogin(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+        UserLoginResponse userInfoDTO = userService.userLogin(userLoginDTO, request);
         return ResultUtils.success(userInfoDTO);
     }
 
     @GetMapping("/get-info")
-    public BaseResponse<UserInfoDTO> getUserInfo(HttpServletRequest request) {
+    public BaseResponse<UserLoginResponse> getUserInfo(HttpServletRequest request) {
         return ResultUtils.success(userService.getLoingUser(request));
     }
 

@@ -1,6 +1,6 @@
 package com.zzy.piccenter.demos.web.infrastructure.interceptor;
 
-import com.zzy.piccenter.demos.web.app.service.UserService;
+import com.alibaba.fastjson2.JSON;
 import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
 import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
@@ -10,6 +10,7 @@ import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,17 +30,20 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthInterceptor {
 
     @Resource
-    private UserService userService;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Around(value = "@annotation(authCheck)", argNames = "joinPoint,authCheck")
     public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthCheck authCheck) throws Throwable {
         String mustRole = authCheck.requiredRole();
+
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-
-
-        Object userObj = request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
-        User loginUser = (User) userObj;
+        String userObj = (String)request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
+//        String token = (String) request.getSession().getAttribute("token");
+//        String token = request.getHeader("token");
+//        String token = request.getHeader("authorization");
+//        String userObj = stringRedisTemplate.opsForValue().get(token);
+        User loginUser = JSON.parseObject(userObj, User.class);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
