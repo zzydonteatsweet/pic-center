@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * <h3>pic-center</h3>
@@ -31,13 +30,9 @@ public class PictureRepositoryImpl implements PictureRepository {
     }
 
     @Override
-    public int addOrUpdatePicture(Picture picture) {
+    public int updatePicture(Picture picture) {
         PicturePO picturePO = PictureConverter.INSTANCE.toPicturePO(picture);
-        if (Objects.isNull(picturePO.getId())) {
-            return pictureMapper.insertSelective(picturePO);
-        } else {
-            return pictureMapper.updateByPrimaryKeySelective(picturePO);
-        }
+        return pictureMapper.updateByPrimaryKeySelective(picturePO);
     }
 
     @Override

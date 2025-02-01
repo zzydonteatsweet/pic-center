@@ -38,10 +38,10 @@ public class AuthInterceptor {
 
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        User loginUser = (User)request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
-//        String token = request.getHeader("token");
-//        String userObj = stringRedisTemplate.opsForValue().get(token);
-//        User loginUser = JSON.parseObject(userObj, User.class);
+//        User loginUser = (User)request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
+        String token = request.getHeader("token");
+        String userObj = stringRedisTemplate.opsForValue().get(token);
+        User loginUser = JSON.parseObject(userObj, User.class);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }

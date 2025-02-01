@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * <h3>pic-center</h3>
@@ -44,6 +45,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .reviewStatus(reviewInfo.getReviewStatus())
                 .reviewMessage(reviewInfo.getReviewMessage())
                 .build();
-        pictureRepository.addOrUpdatePicture(picture);
+        if (Objects.isNull(picture.getId())) {
+            pictureRepository.addPicture(picture);
+        } else {
+            pictureRepository.updatePicture(picture);
+        }
     }
 }

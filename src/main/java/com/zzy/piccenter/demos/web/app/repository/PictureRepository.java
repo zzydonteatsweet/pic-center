@@ -8,7 +8,7 @@ import java.util.List;
 public interface PictureRepository {
     int addPicture(Picture picture);
 
-    int addOrUpdatePicture(Picture picture);
+    int updatePicture(Picture picture);
 
     Picture queryPictureById(Long id);
 

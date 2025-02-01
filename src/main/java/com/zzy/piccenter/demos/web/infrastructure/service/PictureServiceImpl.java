@@ -17,6 +17,7 @@ import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
 import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
+import com.zzy.piccenter.demos.web.domain.common.ReviewStateEnum;
 import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
@@ -122,7 +123,11 @@ public class PictureServiceImpl implements PictureService {
             if (!Objects.isNull(pictureCmd.getId())) {
                 picture.populateId(pictureCmd.getId());
             }
-            pictureRepository.addOrUpdatePicture(picture);
+            if (Objects.isNull(picture.getId())) {
+                pictureRepository.addPicture(picture);
+            } else {
+                pictureRepository.updatePicture(picture);
+            }
         } catch (Exception e) {
             log.error("file upload error, filepath = " + fileName, e);
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
@@ -143,6 +148,9 @@ public class PictureServiceImpl implements PictureService {
     @Override
     public PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserInfoDTO user) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        if (!user.getUserRole().equals(UserRoleEnum.ADMIN.getValue())) {
+            query.setReviewStatus(ReviewStateEnum.PASS.getState());
+        }
         List<Picture> pictures = pictureRepository.queryPictureFuzzily(query);
         PageInfo<Picture> picturePageInfo = new PageInfo<>(pictures);
         List<PictureBriefDTO> briefPictures = PictureAssembler.INSTANCE.toPictureBriefDTO(pictures);
