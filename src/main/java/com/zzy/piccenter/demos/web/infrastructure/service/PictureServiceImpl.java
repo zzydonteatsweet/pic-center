@@ -15,7 +15,7 @@ import com.zzy.piccenter.demos.web.app.repository.PictureRepository;
 import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
-import com.zzy.piccenter.demos.web.app.response.UserLoginResponse;
+import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
 import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
@@ -26,6 +26,7 @@ import com.zzy.piccenter.demos.web.infrastructure.manager.CosManager;
 import com.zzy.piccenter.demos.web.infrastructure.utils.PageBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -104,7 +105,8 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public PictureInfoDTO uploadFile(MultipartFile multipartFile, UserLoginResponse user, PictureCmd pictureCmd) {
+    @Transactional
+    public PictureInfoDTO uploadFile(MultipartFile multipartFile, UserInfoDTO user, PictureCmd pictureCmd) {
         throwIfFileNotValid(multipartFile);
         throwIfPicIdNotValid(pictureCmd.getId(), user);
         String fileName = getFileName(multipartFile.getOriginalFilename());
@@ -131,7 +133,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public void downloadFile(@NotNull Long pictureId, UserLoginResponse user, HttpServletResponse response) {
+    public void downloadFile(@NotNull Long pictureId, UserInfoDTO user, HttpServletResponse response) {
         throwIfPicIdNotValid(pictureId, user);
         Picture picture = pictureRepository.queryPictureById(pictureId);
         String fileName = picture.getName();
@@ -139,7 +141,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserLoginResponse user) {
+    public PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserInfoDTO user) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<Picture> pictures = pictureRepository.queryPictureFuzzily(query);
         PageInfo<Picture> picturePageInfo = new PageInfo<>(pictures);
@@ -148,7 +150,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
 
-    private void throwIfPicIdNotValid(Long picId, UserLoginResponse user) {
+    private void throwIfPicIdNotValid(Long picId, UserInfoDTO user) {
         if (!Objects.isNull(picId)) {
             Picture picture = pictureRepository.queryPictureById(picId);
             ThrowUtils.throwIf(Objects.isNull(picture), new BusinessException(ErrorCode.OPERATION_ERROR, String.format("没有id为%d的图片", picId)));

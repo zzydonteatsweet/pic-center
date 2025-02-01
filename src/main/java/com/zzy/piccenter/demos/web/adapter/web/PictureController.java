@@ -6,7 +6,7 @@ import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.app.response.BaseResponse;
 import com.zzy.piccenter.demos.web.app.response.PictureBriefDTO;
-import com.zzy.piccenter.demos.web.app.response.UserLoginResponse;
+import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.PictureService;
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
@@ -50,20 +50,20 @@ public class PictureController {
 
     @PostMapping("/upload")
     public BaseResponse<PictureInfoDTO> uploadFile(@RequestPart("file") MultipartFile multipartFile, HttpServletRequest request, PictureCmd cmd) {
-        UserLoginResponse user = userService.getLoingUser(request);
+        UserInfoDTO user = userService.getLoingUser(request);
         return ResultUtils.success(pictureService.uploadFile(multipartFile, user, cmd));
     }
 
     @GetMapping("/download")
     public void downloadFile(@NotNull @RequestParam Long pictureId, HttpServletRequest request, HttpServletResponse response) {
-        UserLoginResponse user = userService.getLoingUser(request);
+        UserInfoDTO user = userService.getLoingUser(request);
         pictureService.downloadFile(pictureId, user, response);
     }
 
-    @AuthCheck(requiredRole = "admin")
+    @AuthCheck(requiredRole = "user")
     @PostMapping("/query")
     public BaseResponse<PageInfo<PictureBriefDTO>> queryPictureInfo(HttpServletRequest request, @RequestBody(required = false) PictureBriefQuery query) {
-        UserLoginResponse user = userService.getLoingUser(request);
+        UserInfoDTO user = userService.getLoingUser(request);
         return ResultUtils.success(pictureService.queryPicture(query, user));
     }
 }

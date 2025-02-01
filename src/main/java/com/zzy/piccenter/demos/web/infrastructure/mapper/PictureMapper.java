@@ -1,6 +1,5 @@
 package com.zzy.piccenter.demos.web.infrastructure.mapper;
 
-import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.po.PicturePO;
 
 import java.util.List;

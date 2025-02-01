@@ -37,6 +37,12 @@ public class PictureInfoDTO {
 
     private Long userId;
 
+    private Integer reviewStatus;
+
+    private Integer reviewMessage;
+
+    private Long reviewerId;
+
     private Date createTime;
 
     private Date editeTime;

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzy.piccenter.demos.web.infrastructure.mapper.ReviewInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="pic_id" property="picId" jdbcType="BIGINT" />
+    <result column="reviewer_id" property="reviewerId" jdbcType="BIGINT" />
+    <result column="review_status" property="reviewStatus" jdbcType="INTEGER" />
+    <result column="review_message" property="reviewMessage" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pic_id, reviewer_id, review_status, review_message, create_time, modified_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from review_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from review_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO" >
+    insert into review_info (id, pic_id, reviewer_id, 
+      review_status, review_message, create_time, 
+      modified_time)
+    values (#{id,jdbcType=BIGINT}, #{picId,jdbcType=BIGINT}, #{reviewerId,jdbcType=BIGINT}, 
+      #{reviewStatus,jdbcType=INTEGER}, #{reviewMessage,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO" >
+    insert into review_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="picId != null" >
+        pic_id,
+      </if>
+      <if test="reviewerId != null" >
+        reviewer_id,
+      </if>
+      <if test="reviewStatus != null" >
+        review_status,
+      </if>
+      <if test="reviewMessage != null" >
+        review_message,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="picId != null" >
+        #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewerId != null" >
+        #{reviewerId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewStatus != null" >
+        #{reviewStatus,jdbcType=INTEGER},
+      </if>
+      <if test="reviewMessage != null" >
+        #{reviewMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO" >
+    update review_info
+    <set >
+      <if test="picId != null" >
+        pic_id = #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewerId != null" >
+        reviewer_id = #{reviewerId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewStatus != null" >
+        review_status = #{reviewStatus,jdbcType=INTEGER},
+      </if>
+      <if test="reviewMessage != null" >
+        review_message = #{reviewMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO" >
+    update review_info
+    set pic_id = #{picId,jdbcType=BIGINT},
+      reviewer_id = #{reviewerId,jdbcType=BIGINT},
+      review_status = #{reviewStatus,jdbcType=INTEGER},
+      review_message = #{reviewMessage,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

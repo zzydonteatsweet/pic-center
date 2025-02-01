@@ -4,7 +4,7 @@ import com.zzy.piccenter.demos.web.app.assembler.UserAssembler;
 import com.zzy.piccenter.demos.web.app.repository.UserRepository;
 import com.zzy.piccenter.demos.web.app.request.UserLoginDTO;
 import com.zzy.piccenter.demos.web.app.request.UserRegisterDTO;
-import com.zzy.piccenter.demos.web.app.response.UserLoginResponse;
+import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.UserService;
 import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     private static long REDIS_TTL = 3600;
 
     @Override
-    public UserLoginResponse userLogin(UserLoginDTO userLoginDTO, HttpServletRequest request) {
+    public UserInfoDTO userLogin(UserLoginDTO userLoginDTO, HttpServletRequest request) {
         User submitUser = UserAssembler.INSTANCE.toUser(userLoginDTO);
         User existUser = userRepository.queryUserByUserAccount(submitUser.getUserAccount());
         if (!checkAccountPasswordRight(submitUser, existUser)) {
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserLoginResponse getLoingUser(HttpServletRequest request) {
+    public UserInfoDTO getLoingUser(HttpServletRequest request) {
         User currentUser = getCurrentUser(request);
         return UserAssembler.INSTANCE.toUserInfoDTO(currentUser);
     }

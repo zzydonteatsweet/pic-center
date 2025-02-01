@@ -26,4 +26,9 @@ public class PictureBriefQuery extends PageRequest {
     private String category;
 
     private List<String> tags;
+
+    /**
+     * 0-未审核,1-审核通过,2-审核不通过
+     */
+    private Integer reviewStatus;
 }

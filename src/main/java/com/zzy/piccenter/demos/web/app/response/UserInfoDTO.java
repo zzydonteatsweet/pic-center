@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class UserLoginResponse {
+public class UserInfoDTO {
     private String userAccount;
 
     private String userName;

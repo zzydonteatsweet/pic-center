@@ -43,6 +43,12 @@ public class Picture {
 
     private String userAccount;
 
+    private Integer reviewStatus;
+
+    private String reviewMessage;
+
+    private Long reviewerId;
+
     private Date createTime;
 
     private Date editTime;
