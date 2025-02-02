@@ -3,6 +3,7 @@ package com.zzy.piccenter.demos.web.infrastructure.service;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qcloud.cos.model.COSObject;
@@ -11,6 +12,7 @@ import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.utils.IOUtils;
 import com.zzy.piccenter.demos.web.app.assembler.PictureAssembler;
 import com.zzy.piccenter.demos.web.app.dto.PictureInfoDTO;
+import com.zzy.piccenter.demos.web.app.manager.QueryCacheManager;
 import com.zzy.piccenter.demos.web.app.repository.PictureRepository;
 import com.zzy.piccenter.demos.web.app.request.cmd.PictureCmd;
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
@@ -22,12 +24,15 @@ import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
+import com.zzy.piccenter.demos.web.infrastructure.common.utils.StringUtils;
 import com.zzy.piccenter.demos.web.infrastructure.common.utils.ThrowUtils;
 import com.zzy.piccenter.demos.web.infrastructure.manager.CosManager;
 import com.zzy.piccenter.demos.web.infrastructure.utils.PageBeanUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -48,11 +53,20 @@ import java.util.Objects;
 @Slf4j
 public class PictureServiceImpl implements PictureService {
 
+    private final static String KEY_PREFIX = "query-picture:";
+
     @Resource
     private CosManager cosManager;
 
     @Resource
     private PictureRepository pictureRepository;
+
+    @Resource
+    List<QueryCacheManager> queryCacheManagers;
+
+    @Resource
+    @Qualifier("redisCacheManager")
+    QueryCacheManager redisCacheManager;
 
     @Override
     public void testDownloadFile(String filepath, HttpServletResponse response) throws IOException {
@@ -155,6 +169,32 @@ public class PictureServiceImpl implements PictureService {
         PageInfo<Picture> picturePageInfo = new PageInfo<>(pictures);
         List<PictureBriefDTO> briefPictures = PictureAssembler.INSTANCE.toPictureBriefDTO(pictures);
         return PageBeanUtils.rebuildPage(briefPictures, picturePageInfo);
+    }
+
+    @Override
+    public PageInfo<PictureBriefDTO> queryPictureCached(PictureBriefQuery query, UserInfoDTO user) {
+        if (!user.getUserRole().equals(UserRoleEnum.ADMIN.getValue())) {
+            query.setReviewStatus(ReviewStateEnum.PASS.getState());
+        }
+
+        String queryCondition = JSON.toJSONString(query);
+        String hashKey = DigestUtils.md5DigestAsHex(queryCondition.getBytes());
+        String key = KEY_PREFIX + hashKey;
+        String rawValue = null;
+        for (QueryCacheManager manager : queryCacheManagers) {
+            String tmp = manager.getInfo(key);
+            if (!StringUtils.isBlank(tmp)) {
+                rawValue = tmp;
+                break;
+            }
+        }
+        if (StringUtils.isBlank(rawValue)) {
+            PageInfo<PictureBriefDTO> res = queryPicture(query, user);
+            rawValue = JSON.toJSONString(res);
+            redisCacheManager.putInfo(key, JSON.toJSONString(res));
+        }
+        return JSON.parseObject(rawValue, new TypeReference<PageInfo<PictureBriefDTO>>() {
+        });
     }
 
 

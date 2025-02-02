@@ -64,6 +64,6 @@ public class PictureController {
     @PostMapping("/query")
     public BaseResponse<PageInfo<PictureBriefDTO>> queryPictureInfo(HttpServletRequest request, @RequestBody(required = false) PictureBriefQuery query) {
         UserInfoDTO user = userService.getLoingUser(request);
-        return ResultUtils.success(pictureService.queryPicture(query, user));
+        return ResultUtils.success(pictureService.queryPictureCached(query, user));
     }
 }

@@ -28,4 +28,6 @@ public interface PictureService {
     void downloadFile(Long pictureId, UserInfoDTO user, HttpServletResponse response);
 
     PageInfo<PictureBriefDTO> queryPicture(PictureBriefQuery query, UserInfoDTO user);
+
+    PageInfo<PictureBriefDTO> queryPictureCached(PictureBriefQuery query, UserInfoDTO user);
 }

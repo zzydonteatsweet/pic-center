@@ -1,5 +1,6 @@
 package com.zzy.piccenter.demos.web.app.request.query;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.zzy.piccenter.demos.web.app.request.PageRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
