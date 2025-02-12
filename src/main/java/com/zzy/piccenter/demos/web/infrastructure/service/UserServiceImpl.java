@@ -1,12 +1,12 @@
 package com.zzy.piccenter.demos.web.infrastructure.service;
 
 import com.zzy.piccenter.demos.web.app.assembler.UserAssembler;
-import com.zzy.piccenter.demos.web.app.repository.UserRepository;
+import com.zzy.piccenter.demos.web.domain.repository.UserRepository;
 import com.zzy.piccenter.demos.web.app.request.UserLoginDTO;
 import com.zzy.piccenter.demos.web.app.request.UserRegisterDTO;
 import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.UserService;
-import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
+import com.zzy.piccenter.demos.web.domain.common.enums.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;

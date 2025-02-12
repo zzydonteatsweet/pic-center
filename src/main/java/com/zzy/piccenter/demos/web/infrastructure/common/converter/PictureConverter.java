@@ -1,9 +1,8 @@
-package com.zzy.piccenter.demos.web.infrastructure.converter;
+package com.zzy.piccenter.demos.web.infrastructure.common.converter;
 
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
 import com.zzy.piccenter.demos.web.infrastructure.po.PicturePO;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

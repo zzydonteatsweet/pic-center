@@ -1,9 +1,9 @@
 package com.zzy.piccenter.demos.web.infrastructure.repository;
 
-import com.zzy.piccenter.demos.web.app.repository.PictureRepository;
+import com.zzy.piccenter.demos.web.domain.repository.PictureRepository;
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;
-import com.zzy.piccenter.demos.web.infrastructure.converter.PictureConverter;
+import com.zzy.piccenter.demos.web.infrastructure.common.converter.PictureConverter;
 import com.zzy.piccenter.demos.web.infrastructure.mapper.PictureMapper;
 import com.zzy.piccenter.demos.web.infrastructure.po.PicturePO;
 import org.springframework.stereotype.Repository;

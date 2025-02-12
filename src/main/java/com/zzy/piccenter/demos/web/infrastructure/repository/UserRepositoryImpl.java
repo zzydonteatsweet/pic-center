@@ -1,10 +1,10 @@
 package com.zzy.piccenter.demos.web.infrastructure.repository;
 
-import com.zzy.piccenter.demos.web.app.repository.UserRepository;
+import com.zzy.piccenter.demos.web.domain.repository.UserRepository;
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.ErrorCode;
-import com.zzy.piccenter.demos.web.infrastructure.converter.UserConverter;
+import com.zzy.piccenter.demos.web.infrastructure.common.converter.UserConverter;
 import com.zzy.piccenter.demos.web.infrastructure.handler.GlobalExceptionHandler;
 import com.zzy.piccenter.demos.web.infrastructure.mapper.UserMapper;
 import com.zzy.piccenter.demos.web.infrastructure.po.UserPO;

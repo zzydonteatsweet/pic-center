@@ -1,9 +1,9 @@
 package com.zzy.piccenter.demos.web.infrastructure.service;
 
 import com.zzy.piccenter.demos.web.app.assembler.ReviewAssembler;
-import com.zzy.piccenter.demos.web.app.repository.PictureRepository;
-import com.zzy.piccenter.demos.web.app.repository.ReviewRepository;
-import com.zzy.piccenter.demos.web.app.repository.UserRepository;
+import com.zzy.piccenter.demos.web.domain.repository.PictureRepository;
+import com.zzy.piccenter.demos.web.domain.repository.ReviewRepository;
+import com.zzy.piccenter.demos.web.domain.repository.UserRepository;
 import com.zzy.piccenter.demos.web.app.request.cmd.ReviewPicCmd;
 import com.zzy.piccenter.demos.web.app.response.UserInfoDTO;
 import com.zzy.piccenter.demos.web.app.service.ReviewService;

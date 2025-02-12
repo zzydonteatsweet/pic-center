@@ -1,4 +1,4 @@
-package com.zzy.piccenter.demos.web.app.repository;
+package com.zzy.piccenter.demos.web.domain.repository;
 
 import com.zzy.piccenter.demos.web.app.request.query.PictureBriefQuery;
 import com.zzy.piccenter.demos.web.domain.picture.Picture;

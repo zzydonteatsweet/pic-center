@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzy.piccenter.demos.web.infrastructure.mapper.SpaceMapper" >
+  <resultMap id="BaseResultMap" type="com.zzy.piccenter.demos.web.infrastructure.po.SpacePO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="space_name" property="spaceName" jdbcType="VARCHAR" />
+    <result column="space_level" property="spaceLevel" jdbcType="INTEGER" />
+    <result column="space_type" property="spaceType" jdbcType="INTEGER" />
+    <result column="max_size" property="maxSize" jdbcType="BIGINT" />
+    <result column="max_count" property="maxCount" jdbcType="BIGINT" />
+    <result column="total_size" property="totalSize" jdbcType="BIGINT" />
+    <result column="total_count" property="totalCount" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, space_name, space_level, space_type, max_size, max_count, total_size, total_count, user_id,
+    create_time, edit_time, update_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from space
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from space
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <update id="logicalDeleteByCondition" parameterType="map">
+    UPDATE space
+    SET is_delete = 1
+    <where>
+      <if test="userId != null">AND user_id = #{userId}</if>
+      <if test="spaceType != null">AND space_type = #{spaceType}</if>
+    </where>
+  </update>
+
+  <insert id="insert" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.SpacePO" >
+      insert into space (id, space_name, space_level, space_type,
+                         max_size, max_count, total_size,
+                         total_count, user_id, create_time,
+                         edit_time, update_time, is_delete)
+      values (#{id,jdbcType=BIGINT}, #{spaceName,jdbcType=VARCHAR}, #{spaceLevel,jdbcType=INTEGER},
+              #{maxSize,jdbcType=BIGINT}, #{maxCount,jdbcType=BIGINT}, #{totalSize,jdbcType=BIGINT},
+              #{totalCount,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+              #{editTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <select id="selectSelective" resultMap="BaseResultMap">
+    SELECT
+    id,
+    space_name AS spaceName,
+    space_level AS spaceLevel,
+    space_type AS spaceType,
+    max_size AS maxSize,
+    max_count AS maxCount,
+    total_size AS totalSize,
+    total_count AS totalCount,
+    user_id AS userId,
+    create_time AS createTime,
+    edit_time AS editTime,
+    update_time AS updateTime,
+    is_delete AS isDelete
+    FROM space
+    <where>
+      <if test="id != null">AND id = #{id}</if>
+      <if test="spaceName != null">AND space_name = #{spaceName}</if>
+      <if test="spaceLevel != null">AND space_level = #{spaceLevel}</if>
+      <if test="spaceType != null">AND space_type = #{spaceType}</if>
+      <if test="maxSize != null">AND max_size = #{maxSize}</if>
+      <if test="maxCount != null">AND max_count = #{maxCount}</if>
+      <if test="totalSize != null">AND total_size = #{totalSize}</if>
+      <if test="totalCount != null">AND total_count = #{totalCount}</if>
+      <if test="userId != null">AND user_id = #{userId}</if>
+      <if test="createTime != null">AND create_time = #{createTime}</if>
+      <if test="editTime != null">AND edit_time = #{editTime}</if>
+      <if test="updateTime != null">AND update_time = #{updateTime}</if>
+      <if test="isDelete != null">AND is_delete = #{isDelete}</if>
+    </where>
+  </select>
+  <insert id="insertSelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.SpacePO" >
+    insert into space
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="spaceName != null" >
+        space_name,
+      </if>
+      <if test="spaceLevel != null" >
+        space_level,
+      </if>
+      <if test="spaceType != null" >
+        space_type,
+      </if>
+      <if test="maxSize != null" >
+        max_size,
+      </if>
+      <if test="maxCount != null" >
+        max_count,
+      </if>
+      <if test="totalSize != null" >
+        total_size,
+      </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="editTime != null" >
+        edit_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="spaceName != null" >
+        #{spaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceLevel != null" >
+        #{spaceLevel,jdbcType=INTEGER},
+      </if>
+      <if test="spaceType != null" >
+        #{spaceType,jdbcType=INTEGER},
+      </if>
+      <if test="maxSize != null" >
+        #{maxSize,jdbcType=BIGINT},
+      </if>
+      <if test="maxCount != null" >
+        #{maxCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalSize != null" >
+        #{totalSize,jdbcType=BIGINT},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null" >
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.SpacePO" >
+    update space
+    <set >
+      <if test="spaceName != null" >
+        space_name = #{spaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceLevel != null" >
+        space_level = #{spaceLevel,jdbcType=INTEGER},
+      </if>
+      <if test="spaceType != null" >
+        space_type = #{spaceType,jdbcType=INTEGER},
+      </if>
+      <if test="maxSize != null" >
+        max_size = #{maxSize,jdbcType=BIGINT},
+      </if>
+      <if test="maxCount != null" >
+        max_count = #{maxCount,jdbcType=BIGINT},
+      </if>
+      <if test="totalSize != null" >
+        total_size = #{totalSize,jdbcType=BIGINT},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null" >
+        edit_time = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzy.piccenter.demos.web.infrastructure.po.SpacePO" >
+    update space
+    set space_name = #{spaceName,jdbcType=VARCHAR},
+      space_level = #{spaceLevel,jdbcType=INTEGER},
+      space_type = #{spaceType,jdbcType=INTEGER},
+      max_size = #{maxSize,jdbcType=BIGINT},
+      max_count = #{maxCount,jdbcType=BIGINT},
+      total_size = #{totalSize,jdbcType=BIGINT},
+      total_count = #{totalCount,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

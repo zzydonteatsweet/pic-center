@@ -1,8 +1,8 @@
 package com.zzy.piccenter.demos.web.infrastructure.repository;
 
-import com.zzy.piccenter.demos.web.app.repository.ReviewRepository;
+import com.zzy.piccenter.demos.web.domain.repository.ReviewRepository;
 import com.zzy.piccenter.demos.web.domain.review.ReviewInfo;
-import com.zzy.piccenter.demos.web.infrastructure.converter.ReviewConverter;
+import com.zzy.piccenter.demos.web.infrastructure.common.converter.ReviewConverter;
 import com.zzy.piccenter.demos.web.infrastructure.mapper.ReviewInfoMapper;
 import com.zzy.piccenter.demos.web.infrastructure.po.ReviewInfoPO;
 import org.springframework.stereotype.Repository;

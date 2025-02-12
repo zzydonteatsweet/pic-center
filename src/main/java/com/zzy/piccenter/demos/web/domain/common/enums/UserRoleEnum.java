@@ -1,7 +1,6 @@
-package com.zzy.piccenter.demos.web.domain.common;
+package com.zzy.piccenter.demos.web.domain.common.enums;
 
 import cn.hutool.core.util.ObjUtil;
-import lombok.Getter;
 
 /**
  *

@@ -1,4 +1,4 @@
-package com.zzy.piccenter.demos.web.infrastructure.converter;
+package com.zzy.piccenter.demos.web.infrastructure.common.converter;
 
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.po.UserPO;

@@ -1,4 +1,4 @@
-package com.zzy.piccenter.demos.web.domain.common;
+package com.zzy.piccenter.demos.web.domain.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

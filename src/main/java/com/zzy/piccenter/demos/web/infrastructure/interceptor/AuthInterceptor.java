@@ -1,8 +1,7 @@
 package com.zzy.piccenter.demos.web.infrastructure.interceptor;
 
-import com.alibaba.fastjson2.JSON;
-import com.zzy.piccenter.demos.web.domain.common.UserRoleEnum;
-import com.zzy.piccenter.demos.web.domain.common.UserStateEnum;
+import com.zzy.piccenter.demos.web.domain.common.enums.UserRoleEnum;
+import com.zzy.piccenter.demos.web.domain.common.enums.UserStateEnum;
 import com.zzy.piccenter.demos.web.domain.user.User;
 import com.zzy.piccenter.demos.web.infrastructure.annotation.AuthCheck;
 import com.zzy.piccenter.demos.web.infrastructure.common.exception.BusinessException;
@@ -38,10 +37,10 @@ public class AuthInterceptor {
 
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-//        User loginUser = (User)request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
-        String token = request.getHeader("token");
-        String userObj = stringRedisTemplate.opsForValue().get(token);
-        User loginUser = JSON.parseObject(userObj, User.class);
+        User loginUser = (User)request.getSession().getAttribute(UserStateEnum.USER_LOGIN_STATE.getState());
+//        String token = request.getHeader("token");
+//        String userObj = stringRedisTemplate.opsForValue().get(token);
+//        User loginUser = JSON.parseObject(userObj, User.class);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
